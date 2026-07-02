@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Portal Anime Completo</title>
+    <link rel="stylesheet" href="estilos.css">
+</head>
+<body>
+
+    <h1>🏮 Mi Catálogo de Anime 🏮</h1>
+
+    <div class="contenedor-navegacion">
+        <div class="contenedor-busqueda">
+            <input type="text" id="input-buscar" class="input-busqueda" placeholder="Busca un anime... ej. Naruto">
+            <button id="btn-buscar" class="boton-busqueda">Buscar</button>
+        </div>
+        
+        <div class="menu-categorias">
+            <button class="btn-categoria activo" data-tipo="top">Más Populares</button>
+            <button class="btn-categoria" data-tipo="airing">En Emisión</button>
+            <button class="btn-categoria" data-tipo="upcoming">Próximos Estrenos</button>
+            <button class="btn-categoria" data-tipo="movie">Películas</button>
+        </div>
+    </div>
+    
+    <div id="reproductor-modal" class="modal-reproductor">
+        <div class="contenido-modal">
+            <span class="cerrar-modal" id="btn-cerrar">&times;</span>
+            <h2 id="titulo-anime-modal">Nombre del Anime</h2>
+            <p id="sinopsis-anime-modal"></p>
+            
+            <iframe id="video-iframe" class="reproductor-video" src="" allowfullscreen></iframe>
+
+            <div class="contenedor-capitulos">
+                <h3>Lista de Episodios</h3>
+                <div id="lista-episodios" class="grid-capitulos"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="grid-anime" id="contenedor-anime">
+        <p>Cargando catálogo principal...</p>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
