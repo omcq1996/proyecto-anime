@@ -209,4 +209,8 @@ body {
     background: var(--bg-negro); color: white; border: none; padding: 10px; border-radius: 4px; cursor: pointer; font-size: 12px; font-weight: 600; transition: background 0.2s;
 }
 .btn-capitulo:hover { background: #3a3f4d; }
+
+#anuncio-premium {
+    display: none !important;
+}
 .btn-capitulo.visto { background: var(--naranja-crunchy); color: black; }
