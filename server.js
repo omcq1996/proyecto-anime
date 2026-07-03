@@ -1,5 +1,6 @@
 const express = require('express');
 const cors = require('cors');
+const path = require('path');
 
 const app = express();
 app.use(cors()); // Permite que tu HTML se comunique con este servidor
@@ -19,6 +20,14 @@ const servidoresEspejo = {
         "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4"
     ]
 };
+
+// Le dice al servidor dónde encontrar tus archivos visuales (HTML, CSS, JS del cliente)
+app.use(express.static(__dirname));
+
+// Cuando alguien entre a la URL principal, le entrega el index.html
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'index.html'));
+});
 
 // RUTA 1: Obtener la lista de capítulos disponibles
 app.get('/api/anime/:id/capitulos', (req, res) => {
