@@ -19,10 +19,9 @@ const sinopsisModal = document.getElementById('sinopsis-anime-modal');
 const botonesCategoria = document.querySelectorAll('.btn-categoria');
 const listaEpisodiosContenedor = document.getElementById('lista-episodios');
 
-// Variable global para guardar el anime destacado del Banner
 let animeDestacadoGlobal = null;
 
-// 1. CARGAR ANIMES EN LA PANTALLA PRINCIPAL e INYECTAR EL HERO BANNER
+// 1. CARGAR CATALOGO E INYECTAR PORTADA DEL HERO BANNER
 async function cargarAnimes(url) {
     try {
         contenedor.innerHTML = '<p style="color: var(--texto-gris);">Cargando recomendaciones...</p>';
@@ -35,10 +34,9 @@ async function cargarAnimes(url) {
             return;
         }
 
-        // --- TRUCO CRUNCHYROLL: Hacer el Hero Banner Dinámico ---
-        // Tomamos el primer anime de la lista para colocarlo como portada destacada arriba
+        // Configurar dinámicamente el Hero Banner con el primer resultado
         const animeDestacado = datos.data[0];
-        animeDestacadoGlobal = animeDestacado; // Guardamos referencia
+        animeDestacadoGlobal = animeDestacado;
         
         document.getElementById('hero-titulo').innerText = animeDestacado.title;
         document.getElementById('hero-sinopsis').innerText = animeDestacado.synopsis ? animeDestacado.synopsis : "Sin sinopsis disponible.";
@@ -46,7 +44,7 @@ async function cargarAnimes(url) {
         const urlFondo = animeDestacado.images.jpg.large_image_url || animeDestacado.images.jpg.image_url;
         document.getElementById('hero-banner').style.backgroundImage = `url('${urlFondo}')`;
 
-        // Pintamos el resto del catálogo (los siguientes 12) abajo
+        // Renderizar las tarjetas limpias abajo (sin el indicador flotante fijo de 12)
         datos.data.slice(1, 13).forEach(anime => {
             const tarjeta = document.createElement('div');
             tarjeta.classList.add('tarjeta-anime');
@@ -63,16 +61,14 @@ async function cargarAnimes(url) {
     }
 }
 
-// Escuchar el clic del gran botón naranja de "Comenzar a ver" del Banner principal
 document.getElementById('btn-hero-play').addEventListener('click', () => {
-    if (animeDestacadoGlobal) {
-        abrirReproductor(animeDestacadoGlobal);
-    }
+    if (animeDestacadoGlobal) abrirReproductor(animeDestacadoGlobal);
 });
 
-// 2. OBTENER EPISODIOS E INYECTAR EL REPRODUCTOR DINÁMICO
+// 2. OBTENER EPISODIOS Y CARGAR EL SISTEMA MULTISERVIDOR DE ANIMEFLV
 async function obtenerEpisodiosDesdeMiServidor(animeId) {
     listaEpisodiosContenedor.innerHTML = '<p style="grid-column: 1/-1; color: var(--texto-gris);">Buscando episodios en el servidor...</p>';
+    document.getElementById('contenedor-servidores').innerHTML = ''; 
     
     try {
         const respuesta = await fetch(`${MI_SERVIDOR_LOCAL}/anime/${animeId}/capitulos`);
@@ -88,37 +84,58 @@ async function obtenerEpisodiosDesdeMiServidor(animeId) {
                 document.querySelectorAll('.btn-capitulo').forEach(b => b.classList.remove('visto'));
                 btnEp.classList.add('visto');
                 
-                document.getElementById('pantalla-presentacion').style.display = 'none';
-                document.getElementById('zona-video-real').style.display = 'block';
-                document.getElementById('zona-video-real').innerHTML = '<p style="color: white; padding: 20px; text-align: center;">Abriendo flujo de streaming...</p>';
-
+                // Consultar las opciones de servidores para este capítulo específico al backend
                 const resVideo = await fetch(`${MI_SERVIDOR_LOCAL}/anime/${animeId}/capitulo/${i}`);
-                const datosVideo = await resVideo.json();
+                const datosCapitulo = await resVideo.json();
                 
-                const contenedorVideoReal = document.getElementById('zona-video-real');
+                const barraServidores = document.getElementById('contenedor-servidores');
+                barraServidores.innerHTML = ''; 
                 
-                if (datosVideo.videoUrl.endsWith('.mp4') || datosVideo.videoUrl.includes('googleapis') || datosVideo.videoUrl.startsWith('/')) {
-                    contenedorVideoReal.innerHTML = `
-                        <video id="video-player" controls autoplay style="width: 100%; height: 100%; background: #000;">
-                            <source src="${datosVideo.videoUrl}" type="video/mp4">
-                        </video>
-                    `;
-                } else {
-                    contenedorVideoReal.innerHTML = `
-                        <iframe id="video-iframe" src="${datosVideo.videoUrl}" frameborder="0" allowfullscreen style="width: 100%; height: 100%; background: #000;"></iframe>
-                    `;
-                }
+                // Generar pestañas de servidores dinámicamente
+                datosCapitulo.servidores.forEach((servidor, index) => {
+                    const btnServ = document.createElement('button');
+                    btnServ.classList.add('btn-servidor');
+                    btnServ.innerText = sizeof = servidor.nombre;
+                    
+                    btnServ.addEventListener('click', () => {
+                        document.querySelectorAll('.btn-servidor').forEach(b => b.classList.remove('activo'));
+                        btnServ.classList.add('activo');
+                        
+                        document.getElementById('pantalla-presentacion').style.display = 'none';
+                        document.getElementById('zona-video-real').style.display = 'block';
+                        
+                        const contenedorVideoReal = document.getElementById('zona-video-real');
+                        
+                        // Carga inteligente según la URL entregada por el servidor
+                        if (servidor.url.endsWith('.mp4') || servidor.url.startsWith('/') || servidor.url.includes('googleapis')) {
+                            contenedorVideoReal.innerHTML = `
+                                <video id="video-player" controls autoplay style="width: 100%; height: 100%; background: #000;">
+                                    <source src="${servidor.url}" type="video/mp4">
+                                </video>
+                            `;
+                        } else {
+                            contenedorVideoReal.innerHTML = `
+                                <iframe id="video-iframe" src="${servidor.url}" frameborder="0" allowfullscreen style="width: 100%; height: 100%; background: #000;"></iframe>
+                            `;
+                        }
+                    });
+                    
+                    barraServidores.appendChild(btnServ);
+                    
+                    // Clic automático en la primera opción para agilizar la carga inicial
+                    if (index === 0) btnServ.click();
+                });
             });
             
             listaEpisodiosContenedor.appendChild(btnEp);
         }
     } catch (error) {
-        console.error("Error:", error);
-        listaEpisodiosContenedor.innerHTML = '<p style="grid-column: 1/-1; color: var(--texto-gris);">No hay episodios listados para este contenido.</p>';
+        console.error("Error cargando episodios:", error);
+        listaEpisodiosContenedor.innerHTML = '<p style="grid-column: 1/-1; color: var(--texto-gris);">Episodios no listados en el servidor.</p>';
     }
 }
 
-// 3. CONTROLADORES DEL MODAL
+// 3. CONTROLADORES MODAL
 function abrirReproductor(anime) {
     tituloModal.innerText = anime.title;
     sinopsisModal.innerText = anime.synopsis ? anime.synopsis : "Sin sinopsis disponible.";
@@ -126,9 +143,11 @@ function abrirReproductor(anime) {
     document.getElementById('pantalla-presentacion').style.display = 'block';
     document.getElementById('zona-video-real').style.display = 'none';
     document.getElementById('zona-video-real').innerHTML = '';
+    document.getElementById('contenedor-servidores').innerHTML = '';
 
     const pantallaPreview = document.getElementById('pantalla-presentacion');
-    pantallaPreview.style.backgroundImage = `url('${anime.images.jpg.large_image_url || anime.images.jpg.image_url}')`;
+    const urlImagen = anime.images.jpg.large_image_url || anime.images.jpg.image_url;
+    pantallaPreview.style.backgroundImage = `url('${urlImagen}')`;
     
     obtenerEpisodiosDesdeMiServidor(anime.mal_id);
     modal.style.display = 'flex';
@@ -137,10 +156,11 @@ function abrirReproductor(anime) {
 btnCerrar.addEventListener('click', () => {
     modal.style.display = 'none';
     document.getElementById('zona-video-real').innerHTML = ''; 
+    document.getElementById('contenedor-servidores').innerHTML = ''; 
     listaEpisodiosContenedor.innerHTML = ""; 
 });
 
-// 4. EVENTOS FILTROS
+// 4. CATEGORIAS Y BUSCADOR
 botonesCategoria.forEach(boton => {
     boton.addEventListener('click', (e) => {
         botonesCategoria.forEach(btn => btn.classList.remove('activo'));
@@ -150,7 +170,6 @@ botonesCategoria.forEach(boton => {
     });
 });
 
-// 5. BUSCADOR
 btnBuscar.addEventListener('click', () => {
     const busqueda = inputBuscar.value.trim();
     if (busqueda !== "") {
