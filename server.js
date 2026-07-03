@@ -5,28 +5,20 @@ const axios = require('axios');
 
 const app = express();
 app.use(cors());
-app.use(express.json()); // <-- CRUCIAL: Permite al servidor entender los datos JSON que le mande el robot
 
+// Servir archivos estáticos
 app.use(express.static(path.join(__dirname, './')));
 
+// Ruta principal para cargar el index.html en Render
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'index.html'));
 });
 
-// Nuestra Base de Datos en memoria
-const baseDatosEpisodios = {
-    "20": {
-        "1": [
-            { nombre: "Magi (JKPlayer)", url: "https://jkanime.net/jkplayer/um?e=Y1BBRUwxT1o5MUxyRmVaNmpCd05MN09sTElxTnNEODJpL0R2bmNqSDdwQzViVXo1QnRzTzVVcEtOL1BiemFodDo6tzws9qbEq.I3i_nKwWTeQQ--&t=b628386c9b92481fab68fbf284bd6a64&op=MjcxNA==" }
-        ]
-    }
-};
-
-// 1. OBTENER CAPÍTULOS DESDE JIKAN
+// 1. Obtener número de capítulos desde Jikan
 app.get('/api/anime/:id/capitulos', async (req, res) => {
     const animeId = req.params.id;
     try {
-        const respuestaJikan = await axios.get(`https://api.jikan.moe/v4/anime/${respuestaJikan}`);
+        const respuestaJikan = await axios.get(`https://api.jikan.moe/v4/anime/${animeId}`);
         const totalCapitulos = respuestaJikan.data.data.episodes || 12; 
         res.json({ total: totalCapitulos, animeId: animeId });
     } catch (error) {
@@ -34,51 +26,55 @@ app.get('/api/anime/:id/capitulos', async (req, res) => {
     }
 });
 
-// 2. ENTRAR A BUSCAR LOS SERVIDORES DESDE EL FRONTEND
-app.get('/api/anime/:id/capitulo/:num', (req, res) => {
+// 2. Ruta con los Enlaces Reales de los Servidores por ID y Capítulo
+app.get('/api/anime/:id/capitulo/:num', async (req, res) => {
     const animeId = req.params.id;
     const { num } = req.params;
+    
+    // Lista de servidores por defecto (reproductores de anime activos que sirven de ejemplo base)
+    let misServidores = [
+        { nombre: "Streamwish", url: "https://awish.pro/e/f97bshgq6m97" },
+        { nombre: "Filemoon", url: "https://filemoon.sx/e/5k9z2xj1b8" },
+        { nombre: "Espejo Local", url: "/video-prueba.mp4" }
+    ];
 
-    if (baseDatosEpisodios[animeId] && baseDatosEpisodios[animeId][num]) {
-        return res.json({
-            capitulo: num,
-            servidores: baseDatosEpisodios[animeId][num]
-        });
+    // ======================================================================
+    // EJEMPLO: Configurar links reales para RE:ZERO (Su ID de MyAnimeList es 31240)
+    // ======================================================================
+    if (animeId === "31240") { 
+        if (num === "1") {
+            misServidores = [
+                { nombre: "Streamwish", url: "https://awish.pro/e/aquí_va_el_id_real_del_cap_1" },
+                { nombre: "Filemoon", url: "https://filemoon.sx/e/aquí_va_el_id_real_del_cap_1" }
+            ];
+        }
+        if (num === "2") {
+            misServidores = [
+                { nombre: "Streamwish", url: "https://awish.pro/e/aquí_va_el_id_real_del_cap_2" }
+            ];
+        }
+    }
+
+    // ======================================================================
+    // EJEMPLO: Configurar links reales para NARUTO (Su ID de MyAnimeList es 20)
+    // ======================================================================
+    if (animeId === "20") {
+        if (num === "1") {
+            misServidores = [
+                { nombre: "Streamwish", url: "https://jkanime.net/jkplayer/um?e=Y1BBRUwxT1o5MUxyRmVaNmpCd05MN09sTElxTnNEODJpL0R2bmNqSDdwQzViVXo1QnRzTzVVcEtOL1BiemFodDo6tzws9qbEq.I3i_nKwWTeQQ--&t=b628386c9b92481fab68fbf284bd6a64&op=MjcxNA==" }
+            ];
+        }
     }
 
     res.json({
         capitulo: num,
-        servidores: [
-            { nombre: "Servidor Automático", url: "https://filemoon.sx/e/5k9z2xj1b8" },
-            { nombre: "Espejo Local", url: "/video-prueba.mp4" }
-        ]
+        servidores: misServidores
     });
 });
 
-// ======================================================================
-// 🚪 NUEVA RUTA: La puerta de entrada para tu Robot Cazador
-// ======================================================================
-app.post('/api/subir-links', (req, res) => {
-    const { animeId, capitulo, servidores } = req.body;
-
-    if (!animeId || !capitulo || !servidores) {
-        return res.status(400).json({ error: "Datos incompletos enviados por el robot." });
-    }
-
-    // Si el anime no existe en nuestra BD, lo inicializamos vacío
-    if (!baseDatosEpisodios[animeId]) {
-        baseDatosEpisodios[animeId] = {};
-    }
-
-    // Guardamos automáticamente los servidores frescos que cazó el robot
-    baseDatosEpisodios[animeId][capitulo] = servidores;
-
-    console.log(`🤖 [Robot] Enlaces guardados con éxito para el Anime ID: ${animeId}, Cap: ${capitulo}`);
-    res.json({ mensaje: "Enlaces guardados exitosamente en producción." });
-});
-
+// Puerto dinámico para Render
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-    console.log(`🚀 Servidor central de streaming corriendo en el puerto ${PORT}`);
+    console.log(`🚀 Servidor con capítulos reales corriendo en el puerto ${PORT}`);
 });
        
