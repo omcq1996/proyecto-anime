@@ -6,15 +6,38 @@ const axios = require('axios');
 const app = express();
 app.use(cors());
 
-// Servir archivos estáticos
 app.use(express.static(path.join(__dirname, './')));
 
-// Ruta principal para cargar el index.html en Render
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'index.html'));
 });
 
-// 1. Obtener número de capítulos desde Jikan
+// ======================================================================
+// 🗄️ "BASE DE DATOS" SIMULADA DE TU PLATAFORMA
+// Aquí es donde tu futuro robot guardará los enlaces encriptados automáticamente.
+// Cada anime se guarda por su ID global de MyAnimeList.
+// ======================================================================
+const baseDatosEpisodios = {
+    // NARUTO (ID: 20)
+    "20": {
+        "1": [
+            { nombre: "Magi (JKPlayer)", url: "https://jkanime.net/jkplayer/um?e=Y1BBRUwxT1o5MUxyRmVaNmpCd05MN09sTElxTnNEODJpL0R2bmNqSDdwQzViVXo1QnRzTzVVcEtOL1BiemFodDo6tzws9qbEq.I3i_nKwWTeQQ--&t=b628386c9b92481fab68fbf284bd6a64&op=MjcxNA==" },
+            { nombre: "Espejo Local", url: "/video-prueba.mp4" }
+        ],
+        "2": [
+            { nombre: "Streamwish Real", url: "https://awish.pro/e/f97bshgq6m97" }
+        ]
+    },
+    // RE:ZERO 4th Season (ID: 61642 o el ID de la temporada que cliquees)
+    "61642": {
+        "1": [
+            { nombre: "Streamwish", url: "https://awish.pro/e/f97bshgq6m97" },
+            { nombre: "Filemoon", url: "https://filemoon.sx/e/5k9z2xj1b8" }
+        ]
+    }
+};
+
+// 1. Obtener número de capítulos desde Jikan (Se queda igual, es automático)
 app.get('/api/anime/:id/capitulos', async (req, res) => {
     const animeId = req.params.id;
     try {
@@ -26,56 +49,36 @@ app.get('/api/anime/:id/capitulos', async (req, res) => {
     }
 });
 
-// 2. Ruta con los Enlaces Reales de los Servidores por ID y Capítulo
+// 2. RUTA MAESTRA DINÁMICA: Ya no usa "IFS" manuales por anime
 app.get('/api/anime/:id/capitulo/:num', async (req, res) => {
     const animeId = req.params.id;
     const { num } = req.params;
-    
-    // Lista de servidores por defecto (reproductores de anime activos que sirven de ejemplo base)
-    let misServidores = [
-        { nombre: "Streamwish", url: "https://awish.pro/e/f97bshgq6m97" },
-        { nombre: "Filemoon", url: "https://filemoon.sx/e/5k9z2xj1b8" },
-        { nombre: "Espejo Local", url: "/video-prueba.mp4" }
-    ];
 
-    // ======================================================================
-    // EJEMPLO: Configurar links reales para RE:ZERO (Su ID de MyAnimeList es 31240)
-    // ======================================================================
-    if (animeId === "31240") { 
-        if (num === "1") {
-            misServidores = [
-                { nombre: "Streamwish", url: "https://awish.pro/e/aquí_va_el_id_real_del_cap_1" },
-                { nombre: "Filemoon", url: "https://filemoon.sx/e/aquí_va_el_id_real_del_cap_1" }
-            ];
-        }
-        if (num === "2") {
-            misServidores = [
-                { nombre: "Streamwish", url: "https://awish.pro/e/aquí_va_el_id_real_del_cap_2" }
-            ];
-        }
+    console.log(`🔍 Buscando en la base de datos: Anime ${animeId} -> Capítulo ${num}`);
+
+    // Verificamos si tenemos los servidores de ese anime y ese capítulo guardados
+    if (baseDatosEpisodios[animeId] && baseDatosEpisodios[animeId][num]) {
+        // Si existen, los enviamos de inmediato a la plantilla
+        return res.json({
+            capitulo: num,
+            servidores: baseDatosEpisodios[animeId][num]
+        });
     }
 
-    // ======================================================================
-    // EJEMPLO: Configurar links reales para ONE PIECE (Su ID de MyAnimeList es 21)
-    // ======================================================================
-    if (animeId === "20") {
-        if (num === "1") {
-            misServidores = [
-                { nombre: "Magi (JKPlayer)", url:"https://jkanime.net/jkplayer/um?e=Y1BBRUwxT1o5MUxyRmVaNmpCd05MN09sTElxTnNEODJpL0R2bmNqSDdwQzViVXo1QnRzTzVVcEtOL1BiemFodDo6tzws9qbEq.I3i_nKwWTeQQ--&t=b628386c9b92481fab68fbf284bd6a64&op=MjcxNA==" }
-            ];
-        }
-    }
-
+    // SI NO EXISTE: En lugar de dar error, tu servidor actúa de forma inteligente
+    // y le manda servidores espejo genéricos de prueba para que la web nunca se rompa.
     res.json({
         capitulo: num,
-        servidores: misServidores
+        servidores: [
+            { nombre: "Servidor Automático", url: "https://filemoon.sx/e/5k9z2xj1b8" },
+            { nombre: "Espejo Local", url: "/video-prueba.mp4" }
+        ]
     });
 });
 
-// Puerto dinámico para Render
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-    console.log(`🚀 Servidor con capítulos reales corriendo en el puerto ${PORT}`);
+    console.log(`🚀 Base de datos dinámica corriendo en el puerto ${PORT}`);
 });
    
        
