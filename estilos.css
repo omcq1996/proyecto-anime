@@ -318,3 +318,41 @@ body {
 .btn-capitulo.visto {
     background: #00b894; border-color: #00b894; /* Verde esmeralda al reproducir */
 }
+
+/* --- NUEVOS ESTILOS PARA LA PANTALLA DE BIENVENIDA --- */
+.pantalla-preview {
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    position: relative;
+    background-color: #12121e;
+}
+.capa-oscura {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: linear-gradient(to top, #12121e, rgba(10, 10, 15, 0.4));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.info-preview {
+    text-align: center;
+    padding: 20px;
+}
+.badge-premium {
+    background: var(--color-acento);
+    color: white;
+    font-size: 11px;
+    font-weight: 800;
+    padding: 5px 15px;
+    border-radius: 20px;
+    letter-spacing: 2px;
+    box-shadow: 0 0 15px rgba(138, 43, 226, 0.6);
+}
+.instruccion-play {
+    color: var(--texto-secundario);
+    font-size: 15px;
+    margin-top: 15px;
+    font-weight: 500;
+}
