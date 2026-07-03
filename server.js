@@ -6,8 +6,10 @@ const axios = require('axios');
 const app = express();
 app.use(cors());
 
+// Servir archivos estáticos
 app.use(express.static(path.join(__dirname, './')));
 
+// Ruta principal para cargar el index.html en Render
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'index.html'));
 });
@@ -24,70 +26,42 @@ app.get('/api/anime/:id/capitulos', async (req, res) => {
     }
 });
 
-// 2. Ruta con los Enlaces Reales de los Servidores
+// 2. Ruta con los Enlaces Reales de los Servidores por ID y Capítulo
 app.get('/api/anime/:id/capitulo/:num', async (req, res) => {
     const animeId = req.params.id;
     const { num } = req.params;
     
-    // Aquí es donde empieza la magia real.
-    // Creamos una lista de servidores por defecto (reproductores reales activos)
+    // Lista de servidores por defecto (reproductores de anime activos que sirven de ejemplo base)
     let misServidores = [
-        { nombre: "Streamwish", url: "https://awish.pro/e/f97bshgq6m97" }, // Enlace real de un reproductor de anime activo
+        { nombre: "Streamwish", url: "https://awish.pro/e/f97bshgq6m97" },
         { nombre: "Filemoon", url: "https://filemoon.sx/e/5k9z2xj1b8" },
         { nombre: "Espejo Local", url: "/video-prueba.mp4" }
     ];
 
-    // [OPCIONAL] Si quieres configurar capítulos específicos de un anime:
-    // Por ejemplo, si el ID del anime es de One Piece o Re:Zero, puedes cambiar los links:
-    if (animeId === "21") { // ID de Jikan para un anime específico
+    // ======================================================================
+    // EJEMPLO: Configurar links reales para RE:ZERO (Su ID de MyAnimeList es 31240)
+    // ======================================================================
+    if (animeId === "31240") { 
         if (num === "1") {
             misServidores = [
-                { nombre: "Streamwish", url: const express = require('express');
-const cors = require('cors');
-const path = require('path');
-const axios = require('axios');
-
-const app = express();
-app.use(cors());
-
-app.use(express.static(path.join(__dirname, './')));
-
-app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'index.html'));
-});
-
-// 1. Obtener número de capítulos desde Jikan
-app.get('/api/anime/:id/capitulos', async (req, res) => {
-    const animeId = req.params.id;
-    try {
-        const respuestaJikan = await axios.get(`https://api.jikan.moe/v4/anime/${animeId}`);
-        const totalCapitulos = respuestaJikan.data.data.episodes || 12; 
-        res.json({ total: totalCapitulos, animeId: animeId });
-    } catch (error) {
-        res.json({ total: 12, animeId: animeId });
+                { nombre: "Streamwish", url: "https://awish.pro/e/aquí_va_el_id_real_del_cap_1" },
+                { nombre: "Filemoon", url: "https://filemoon.sx/e/aquí_va_el_id_real_del_cap_1" }
+            ];
+        }
+        if (num === "2") {
+            misServidores = [
+                { nombre: "Streamwish", url: "https://awish.pro/e/aquí_va_el_id_real_del_cap_2" }
+            ];
+        }
     }
-});
 
-// 2. Ruta con los Enlaces Reales de los Servidores
-app.get('/api/anime/:id/capitulo/:num', async (req, res) => {
-    const animeId = req.params.id;
-    const { num } = req.params;
-    
-    // Aquí es donde empieza la magia real.
-    // Creamos una lista de servidores por defecto (reproductores reales activos)
-    let misServidores = [
-        { nombre: "Streamwish", url: "https://awish.pro/e/f97bshgq6m97" }, // Enlace real de un reproductor de anime activo
-        { nombre: "Filemoon", url: "https://filemoon.sx/e/5k9z2xj1b8" },
-        { nombre: "Espejo Local", url: "/video-prueba.mp4" }
-    ];
-
-    // [OPCIONAL] Si quieres configurar capítulos específicos de un anime:
-    // Por ejemplo, si el ID del anime es de One Piece o Re:Zero, puedes cambiar los links:
-    if (animeId === "20") { // ID de Jikan para un anime específico
+    // ======================================================================
+    // EJEMPLO: Configurar links reales para ONE PIECE (Su ID de MyAnimeList es 21)
+    // ======================================================================
+    if (animeId === "20") {
         if (num === "1") {
             misServidores = [
-                { nombre: "Streamwish", url: "https://cdn.jkdesa.com/assets3/js/ua-parser.js?v=2.0.184" },
-                { nombre: "VOE", url: "URL_DE_VOE_QUE_COPIASTE" }
+                { nombre: "Magi (JKPlayer)", url:"https://jkanime.net/jkplayer/um?e=Y1BBRUwxT1o5MUxyRmVaNmpCd05MN09sTElxTnNEODJpL0R2bmNqSDdwQzViVXo1QnRzTzVVcEtOL1BiemFodDo6tzws9qbEq.I3i_nKwWTeQQ--&t=b628386c9b92481fab68fbf284bd6a64&op=MjcxNA==" }
             ];
         }
     }
@@ -98,21 +72,7 @@ app.get('/api/anime/:id/capitulo/:num', async (req, res) => {
     });
 });
 
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-    console.log(`🚀 Servidor con capítulos reales corriendo en el puerto ${PORT}`);
-}); },
-                { nombre: "VOE", url: "URL_DE_VOE_QUE_COPIASTE" }
-            ];
-        }
-    }
-
-    res.json({
-        capitulo: num,
-        servidores: misServidores
-    });
-});
-
+// Puerto dinámico para Render
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
     console.log(`🚀 Servidor con capítulos reales corriendo en el puerto ${PORT}`);
