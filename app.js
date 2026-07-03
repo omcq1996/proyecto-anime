@@ -1,5 +1,5 @@
 const JIKAN_URL = 'https://api.jikan.moe/v4';
-const MI_SERVIDOR_LOCAL = 'http://localhost:3000/api'; // Tu nuevo backend
+const MI_SERVIDOR_LOCAL = 'https://proyecto-anime-zqu2.onrender.com/api'; // Tu nuevo backend
 
 const urlsAPI = {
     top: `${JIKAN_URL}/top/anime`,
