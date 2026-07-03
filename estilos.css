@@ -1,212 +1,229 @@
-:root {
-    --bg-negro: #23252b; /* El gris oscuro de Crunchyroll */
-    --bg-fondo: #141519; /* Fondo general */
-    --naranja-crunchy: #f47521;
-    --naranja-hover: #ff8c3a;
-    --texto-blanco: #ffffff;
-    --texto-gris: #a0a0a0;
-    --fuente: 'Segoe UI', system-ui, sans-serif;
+/* ======================================================================
+   🌟 ESTILOS GENERALES (Estilo Oscuro Crunchyroll)
+   ====================================================================== */
+* {
+    margin: 0;
+    padding: 0;
+    box-shadow: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 body {
-    background-color: var(--bg-fondo);
-    color: var(--texto-blanco);
-    font-family: var(--fuente);
-    margin: 0;
-    padding-bottom: 60px;
+    background-color: #141519;
+    color: #f5f5f7;
+    padding: 20px;
 }
 
-/* --- HEADER --- */
-.header-crunchy {
-    background-color: var(--bg-negro);
-    padding: 0 20px;
-    height: 60px;
-    display: flex;
-    align-items: center;
-    position: sticky;
-    top: 0;
-    z-index: 100;
-}
-.header-contenido {
-    max-width: 1400px;
-    width: 100%;
-    margin: 0 auto;
+header {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    margin-bottom: 30px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #23252b;
 }
-.logo {
-    font-size: 24px;
-    font-weight: 900;
-    text-transform: uppercase;
-    letter-spacing: -0.5px;
-}
-.logo span { color: var(--naranja-crunchy); }
 
-.nav-links {
-    display: flex;
+h1 {
+    color: #f47521; /* Naranja Crunchyroll */
+    font-size: 24px;
+}
+
+#buscador {
+    background-color: #23252b;
+    border: 1px solid #32353d;
+    padding: 10px 15px;
+    color: #fff;
+    border-radius: 4px;
+    width: 300px;
+    outline: none;
+    transition: 0.3s;
+}
+
+#buscador:focus {
+    border-color: #f47521;
+}
+
+/* Cuadrícula Catálogo Principal */
+#contenedor-animes {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
     gap: 20px;
 }
-.nav-links a {
-    color: var(--texto-gris);
-    text-decoration: none;
-    font-weight: 600;
-    font-size: 14px;
-    transition: color 0.2s;
-}
-.nav-links a.active, .nav-links a:hover {
-    color: var(--texto-blanco);
-}
 
-/* Buscador */
-.contenedor-busqueda {
-    display: flex;
-    background: rgba(255,255,255,0.08);
-    border-radius: 4px;
+.tarjeta-anime {
+    background-color: #23252b;
+    border-radius: 6px;
     overflow: hidden;
-}
-.input-busqueda {
-    padding: 8px 12px;
-    background: transparent;
-    border: none; outline: none;
-    color: white; width: 180px; font-size: 13px;
-}
-.boton-busqueda {
-    background: transparent; border: none; color: white; cursor: pointer; padding: 0 10px;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
 }
 
-/* --- HERO BANNER --- */
-.hero-banner {
-    width: 100%;
-    height: 480px;
-    background-size: cover;
-    background-position: top center;
-    position: relative;
-    transition: background-image 0.5s ease;
+.tarjeta-anime:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(244, 117, 33, 0.2);
 }
-.hero-degradado {
-    position: absolute;
-    width: 100%; height: 100%;
-    background: linear-gradient(to right, var(--bg-fondo) 30%, rgba(20,21,25,0.6) 60%, transparent 100%),
-                linear-gradient(to top, var(--bg-fondo) 5%, transparent 40%);
+
+.tarjeta-anime img {
+    width: 100%;
+    height: 250px;
+    object-fit: cover;
+}
+
+.tarjeta-anime h3 {
+    font-size: 14px;
+    padding: 10px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* ======================================================================
+   🎬 INTERFAZ DEL REPRODUCTOR (Ficha del Anime)
+   ====================================================================== */
+#modal-reproductor {
+    background-color: #1a1b20;
+    border-radius: 8px;
+    padding: 25px;
+    margin-top: 20px;
+    border: 1px solid #23252b;
+}
+
+.encabezado-ficha {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 15px;
+}
+
+#titulo-anime {
+    font-size: 22px;
+    color: #fff;
+}
+
+.btn-cerrar {
+    background: none;
+    border: none;
+    color: #a0a0a0;
+    font-size: 24px;
+    cursor: pointer;
+}
+
+.btn-cerrar:hover {
+    color: #fff;
+}
+
+#sinopsis-anime {
+    font-size: 14px;
+    color: #a0a0a0;
+    line-height: 1.5;
+    margin-bottom: 25px;
+    max-width: 800px;
+}
+
+/* 📺 CONTENEDOR 16:9 DEL TRAILER / VIDEO */
+#contenedor-reproductor {
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto 20px auto;
+    aspect-ratio: 16 / 9;
+    background-color: #000;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
+}
+
+#contenedor-reproductor iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+}
+
+/* Reemplazo por si no hay trailer */
+.trailer-reemplazo {
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
     display: flex;
     align-items: center;
-}
-.hero-info {
-    max-width: 550px;
-    padding: 0 40px;
-    text-align: left;
-}
-#hero-titulo {
-    font-size: 42px; font-weight: 800; margin: 0 0 15px 0; line-height: 1.1;
-}
-#hero-sinopsis {
-    color: var(--texto-gris); font-size: 14px; line-height: 1.6; margin-bottom: 25px;
-    display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;
-}
-.btn-naranja {
-    background-color: var(--naranja-crunchy); color: black; border: none;
-    padding: 12px 28px; font-weight: 800; font-size: 14px; border-radius: 2px;
-    cursor: pointer; letter-spacing: 0.5px; transition: background 0.2s;
-}
-.btn-naranja:hover { background-color: var(--naranja-hover); }
-
-/* --- SECCIÓN CATÁLOGO --- */
-.contenedor-catalogo {
-    max-width: 1400px;
-    margin: 30px auto;
-    padding: 0 40px;
-}
-.titulo-seccion h2 {
-    font-size: 22px; font-weight: 700; margin: 0 0 20px 0;
+    justify-content: center;
 }
 
-/* Categorías */
-.menu-categorias { display: flex; gap: 10px; margin-bottom: 25px; }
-.btn-categoria {
-    background: var(--bg-negro); border: none; color: var(--texto-gris);
-    padding: 8px 16px; font-weight: 600; font-size: 13px; cursor: pointer; border-radius: 4px;
-}
-.btn-categoria.activo, .btn-categoria:hover {
-    background-color: rgba(244, 117, 33, 0.1); color: var(--naranja-crunchy);
-}
-
-/* Grilla */
-.grid-anime {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
-    gap: 20px;
-}
-.tarjeta-anime {
-    cursor: pointer; transition: transform 0.2s;
-}
-.tarjeta-anime:hover { transform: scale(1.03); }
-.tarjeta-anime img {
-    width: 100%; height: 280px; object-fit: cover; border-radius: 4px;
-}
-.tarjeta-anime h3 {
-    font-size: 14px; font-weight: 600; margin: 8px 0 0 0; text-align: left;
-    white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: var(--texto-blanco);
+.trailer-reemplazo p {
+    background: rgba(0, 0, 0, 0.8);
+    padding: 12px 24px;
+    border-radius: 30px;
+    color: #fff;
+    font-size: 15px;
+    font-weight: bold;
 }
 
-/* --- BARRA DE SERVIDORES (ESTILO FLV) --- */
-.barra-servidores {
+/* 🎛️ PESTAÑAS DE SERVIDORES (Debajo del Video) */
+#barra-servidores {
     display: flex;
-    gap: 8px;
-    margin-bottom: 15px;
+    gap: 10px;
+    justify-content: center;
+    margin-bottom: 25px;
     flex-wrap: wrap;
-    justify-content: flex-start;
 }
+
 .btn-servidor {
-    background-color: var(--bg-negro);
-    color: var(--texto-gris);
-    border: 1px solid rgba(255,255,255,0.08);
+    background-color: #23252b;
+    border: 1px solid #32353d;
+    color: #fff;
     padding: 8px 16px;
-    font-size: 12px;
-    font-weight: 700;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 600;
+    transition: 0.2s;
+}
+
+.btn-servidor:hover {
+    background-color: #32353d;
+    border-color: #f47521;
+}
+
+.btn-servidor.activo {
+    background-color: #f47521;
+    border-color: #f47521;
+    color: #000;
+}
+
+/* 🔢 SECCIÓN DE EPISODIOS (Cuadrícula Crunchyroll) */
+.seccion-episodios-titulo {
+    font-size: 18px;
+    border-left: 4px solid #f47521;
+    padding-left: 10px;
+    margin-bottom: 15px;
+    color: #fff;
+}
+
+#contenedor-episodios {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+    gap: 12px;
+}
+
+.btn-episodio {
+    background-color: #23252b;
+    border: 1px solid #32353d;
+    color: #fff;
+    padding: 12px;
     border-radius: 4px;
     cursor: pointer;
-    text-transform: uppercase;
-    transition: all 0.2s;
-}
-.btn-servidor:hover {
-    color: white;
-    background-color: #3a3f4d;
-}
-.btn-servidor.activo {
-    background-color: var(--naranja-crunchy);
-    color: black;
-    border-color: var(--naranja-crunchy);
+    font-weight: bold;
+    font-size: 13px;
+    transition: 0.2s;
 }
 
-/* --- MODAL Y REPRODUCTOR --- */
-.modal-reproductor {
-    display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(0,0,0,0.85); z-index: 1000; justify-content: center; align-items: center;
+.btn-episodio:hover {
+    background-color: #32353d;
+    border-color: #f47521;
 }
-.contenido-modal {
-    background: var(--bg-fondo); padding: 30px; border-radius: 6px;
-    max-width: 850px; width: 90%; position: relative; border: 1px solid rgba(255,255,255,0.05);
-}
-.cerrar-modal {
-    position: absolute; top: 15px; right: 20px; font-size: 30px; cursor: pointer; color: var(--texto-gris);
-}
-.cerrar-modal:hover { color: white; }
-#titulo-anime-modal { margin: 0 0 10px 0; font-size: 26px; text-align: left; }
-#sinopsis-anime-modal { color: var(--texto-gris); font-size: 13px; text-align: justify; margin-bottom: 20px; line-height: 1.5;}
-#contenedor-reproductor { width: 100%; aspect-ratio: 16/9; background: #000; border-radius: 4px; overflow: hidden; }
 
-/* Vista Previa */
-.pantalla-preview { width: 100%; height: 100%; background-size: cover; background-position: center; position: relative; }
-.capa-oscura { position: absolute; width: 100%; height: 100%; background: linear-gradient(to top, #141519, rgba(0,0,0,0.3)); display: flex; align-items: center; justify-content: center; }
-.badge-premium { background: var(--naranja-crunchy); color: black; font-size: 10px; font-weight: 900; padding: 4px 12px; border-radius: 2px; letter-spacing: 1px; }
-.instruccion-play { color: var(--texto-gris); font-size: 14px; margin-top: 12px; }
-
-/* Botones de Episodios */
-.contenedor-capitulos h3 { font-size: 16px; margin: 20px 0 12px 0; border-left: 3px solid var(--naranja-crunchy); padding-left: 10px; }
-.grid-capitulos { display: grid; grid-template-columns: repeat(auto-fill, minmax(90px, 1fr)); gap: 10px; max-height: 120px; overflow-y: auto; }
-.btn-capitulo {
-    background: var(--bg-negro); color: white; border: none; padding: 10px; border-radius: 4px; cursor: pointer; font-size: 12px; font-weight: 600; transition: background 0.2s;
+.btn-episodio.activo {
+    background-color: #f47521;
+    color: #000;
+    border-color: #f47521;
 }
-.btn-capitulo:hover { background: #3a3f4d; }
-.btn-capitulo.visto { background: var(--naranja-crunchy); color: black; }
