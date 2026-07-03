@@ -44,6 +44,7 @@ app.get('/api/anime/:id/capitulo/:num', (req, res) => {
 });
 
 // Iniciar el servidor en el puerto 3000
-app.listen(3000, () => {
-    console.log("🚀 Tu servidor de AnimeFLV local está corriendo en http://localhost:3000");
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+    console.log(`🚀 Servidor corriendo en el puerto ${PORT}`);
 });
