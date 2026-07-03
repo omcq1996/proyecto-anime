@@ -1,198 +1,320 @@
-/* --- ESTILOS GENERALES --- */
-body {
-    background-color: #141414;
-    color: white;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    margin: 0;
-    padding: 20px;
-}
-h1 {
-    text-align: center;
-    color: #ff4757;
-    margin-bottom: 20px;
-    text-shadow: 0px 4px 10px rgba(255, 71, 87, 0.3);
+/* --- PALETA DE COLORES PREMIUM (CYBERPUNK / LIGHT NEON) --- */
+:root {
+    --bg-base: #0a0a0f;
+    --bg-superficie: #12121e;
+    --bg-superficie-trans: rgba(18, 18, 30, 0.6);
+    --color-acento: #8a2be2; /* Violeta Eléctrico */
+    --color-acento-brillo: #a020f0;
+    --color-tag: #00f2fe; /* Cian de alta tecnología para episodios */
+    --texto-principal: #ffffff;
+    --texto-secundario: #a4b0be;
+    --fuente: 'Poppins', 'Segoe UI', system-ui, sans-serif;
 }
 
-.contenedor-navegacion {
+body {
+    background-color: var(--bg-base);
+    color: var(--texto-principal);
+    font-family: var(--fuente);
+    margin: 0;
+    padding-bottom: 50px;
+}
+
+/* --- BARRA SUPERIOR (HEADER INTEGRADO) --- */
+.header-flv {
+    background-color: var(--bg-superficie);
+    padding: 15px 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+.header-contenido {
+    max-width: 1200px;
+    margin: 0 auto;
     display: flex;
-    flex-direction: column;
+    justify-content: space-between;
     align-items: center;
     gap: 15px;
-    margin-bottom: 30px;
+}
+.logo {
+    color: var(--texto-principal);
+    font-size: 26px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+.logo span {
+    color: var(--color-acento);
 }
 
-/* --- BUSCADOR --- */
+/* BUSCADOR ESTILIZADO */
 .contenedor-busqueda {
     display: flex;
+    background: #06060a;
+    border-radius: 30px;
+    overflow: hidden;
+    padding: 2px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: all 0.3s ease;
+}
+.contenedor-busqueda:focus-within {
+    border-color: var(--color-acento);
+    box-shadow: 0 0 10px rgba(138, 43, 226, 0.3);
 }
 .input-busqueda {
-    padding: 12px 20px;
-    width: 300px;
+    padding: 8px 20px;
+    background: transparent;
     border: none;
-    border-radius: 25px 0 0 25px;
     outline: none;
-    font-size: 16px;
-    background-color: #222;
     color: white;
+    width: 260px;
+    font-size: 14px;
 }
 .boton-busqueda {
-    padding: 12px 25px;
+    background: var(--color-acento);
     border: none;
-    background-color: #ff4757;
     color: white;
-    font-size: 16px;
-    border-radius: 0 25px 25px 0;
+    padding: 0 20px;
+    border-radius: 20px;
     cursor: pointer;
-    font-weight: bold;
     transition: background 0.2s;
 }
 .boton-busqueda:hover {
-    background-color: #ff6b81;
+    background: var(--color-acento-brillo);
 }
 
-/* --- CATEGORÍAS --- */
+/* MENÚ NAVEGACIÓN DE PESTAÑAS */
 .menu-categorias {
+    max-width: 1200px;
+    margin: 25px auto;
     display: flex;
     gap: 10px;
-    flex-wrap: wrap;
-    justify-content: center;
+    padding: 0 15px;
 }
 .btn-categoria {
-    background-color: #2f3542;
-    color: white;
+    background: transparent;
     border: none;
-    padding: 10px 20px;
-    border-radius: 20px;
+    padding: 8px 18px;
+    font-weight: 600;
+    color: var(--texto-secundario);
     cursor: pointer;
-    font-weight: bold;
-    transition: all 0.2s;
+    font-size: 14px;
+    border-radius: 20px;
+    transition: all 0.3s;
 }
-.btn-categoria:hover {
-    background-color: #ff4757;
-}
-.btn-categoria.activo {
-    background-color: #ff4757;
+.btn-categoria:hover, .btn-categoria.activo {
+    color: var(--texto-principal);
+    background-color: rgba(138, 43, 226, 0.15);
 }
 
-/* --- REPRODUCTOR MODAL (VENTANA FLOTANTE) --- */
+/* --- ESTRUCTURA ASIMÉTRICA DE DOS COLUMNAS --- */
+.bloque-principal {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    gap: 35px;
+    padding: 0 15px;
+}
+
+/* --- BARRA LATERAL (ANIMES EN EMISIÓN) --- */
+.columna-izquierda {
+    background: var(--bg-superficie);
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.03);
+    overflow: hidden;
+    align-self: start;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+.titulo-emision {
+    background: linear-gradient(135deg, var(--color-acento), #4b0082);
+    color: white;
+    padding: 15px;
+}
+.titulo-emision h3 {
+    margin: 0; font-size: 14px; font-weight: 700; letter-spacing: 0.5px;
+}
+.lista-emision {
+    list-style: none;
+    padding: 0; margin: 0;
+}
+.lista-emision li {
+    padding: 14px 15px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--texto-secundario);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+.lista-emision li:hover {
+    color: var(--texto-principal);
+    background: rgba(255, 255, 255, 0.02);
+    padding-left: 20px; /* Sutil empujón dinámico */
+}
+.icono-play {
+    color: var(--color-acento);
+    font-size: 9px;
+    margin-right: 8px;
+}
+.tag-anime {
+    background: rgba(0, 242, 254, 0.1);
+    color: var(--color-tag);
+    font-size: 9px;
+    font-weight: 700;
+    padding: 2px 6px;
+    border-radius: 4px;
+    border: 1px solid rgba(0, 242, 254, 0.2);
+}
+
+/* --- BLOQUE DERECHO (GRID DE CONTENIDO) --- */
+.titulo-ultimos {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    margin-bottom: 25px;
+    padding-bottom: 12px;
+}
+.titulo-ultimos h2 {
+    margin: 0;
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+}
+.tag-hoy {
+    background: var(--color-acento);
+    color: white;
+    padding: 3px 12px;
+    font-size: 11px;
+    border-radius: 20px;
+    font-weight: 700;
+    box-shadow: 0 0 10px rgba(138, 43, 226, 0.4);
+}
+
+/* --- TARJETAS CON DISEÑO DE PORTADA PREMIUM --- */
+.grid-anime {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 25px;
+}
+.tarjeta-anime {
+    position: relative;
+    border-radius: 12px;
+    overflow: hidden;
+    cursor: pointer;
+    background: var(--bg-superficie);
+    border: 1px solid rgba(255, 255, 255, 0.03);
+    height: 260px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+    transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+.tarjeta-anime:hover {
+    transform: translateY(-5px);
+    border-color: var(--color-acento);
+    box-shadow: 0 12px 25px rgba(138, 43, 226, 0.2);
+}
+.tarjeta-anime img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+}
+.tarjeta-anime:hover img {
+    transform: scale(1.04);
+}
+
+/* Título difuminado inferior */
+.tarjeta-anime h3 {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    background: linear-gradient(transparent, rgba(10, 10, 15, 0.95) 70%);
+    color: var(--texto-principal);
+    margin: 0;
+    padding: 30px 12px 12px 12px;
+    font-size: 13px;
+    font-weight: 600;
+    text-align: left;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Etiqueta de capítulo flotante de alta tecnología */
+.tarjeta-anime::after {
+    content: var(--capitulo, "Episodio 12") !important;
+    position: absolute;
+    top: 12px; left: 12px;
+    background-color: rgba(10, 10, 15, 0.75);
+    color: var(--color-tag);
+    border: 1px solid rgba(0, 242, 254, 0.3);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    font-size: 10px;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: 6px;
+}
+
+/* --- REPRODUCTOR MODAL ESTILO GLASS --- */
 .modal-reproductor {
     display: none;
     position: fixed;
     top: 0; left: 0; width: 100%; height: 100%;
-    background-color: rgba(0, 0, 0, 0.95);
+    background: rgba(5, 5, 8, 0.7);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
     z-index: 1000;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
+    justify-content: center; align-items: center;
 }
 .contenido-modal {
-    background-color: #1e1e1e;
-    padding: 20px;
-    border-radius: 10px;
+    background: var(--bg-superficie);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    padding: 25px;
+    border-radius: 16px;
     max-width: 800px;
     width: 90%;
-    text-align: center;
     position: relative;
-    box-shadow: 0px 0px 25px rgba(0,0,0,0.7);
+    box-shadow: 0 25px 60px rgba(0,0,0,0.7);
 }
 .cerrar-modal {
     position: absolute;
-    top: 10px; right: 20px;
-    font-size: 35px;
-    color: #ff4757;
-    cursor: pointer;
-    line-height: 1;
+    top: 15px; right: 20px;
+    font-size: 32px; color: var(--texto-secundario); cursor: pointer;
+    transition: color 0.2s;
+}
+.cerrar-modal:hover {
+    color: var(--color-acento);
 }
 #titulo-anime-modal {
-    margin-top: 10px;
-    font-size: 24px;
+    margin: 0 0 10px 0; color: white; font-size: 24px;
 }
 #sinopsis-anime-modal {
-    color: #ccc; 
-    font-size: 14px; 
-    text-align: justify;
-    max-height: 100px;
-    overflow-y: auto;
-    padding-right: 5px;
-    margin-bottom: 15px;
+    color: var(--texto-secundario); font-size: 13px; text-align: justify; margin-bottom: 20px;
 }
-.reproductor-video {
-    width: 100%;
-    height: 400px;
-    border: none;
-    border-radius: 5px;
-    background-color: #000;
+#contenedor-reproductor {
+    border-radius: 10px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
 }
 
-/* --- SECCIÓN DE CAPÍTULOS --- */
-.contenedor-capitulos {
-    margin-top: 20px;
-    border-top: 1px solid #333;
-    padding-top: 15px;
-}
+/* BOTONES DE CAPÍTULOS DEL MODAL */
 .contenedor-capitulos h3 {
-    margin: 0 0 10px 0;
-    color: #ff4757;
-    font-size: 18px;
+    font-size: 16px; margin: 20px 0 10px 0;
 }
 .grid-capitulos {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(85px, 1fr));
     gap: 10px;
-    max-height: 120px;
-    overflow-y: auto;
-    padding: 5px;
+    max-height: 130px; overflow-y: auto;
 }
 .btn-capitulo {
-    background-color: #2f3542;
-    color: white;
-    border: 1px solid #444;
-    padding: 8px;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 13px;
-    font-weight: bold;
+    background: rgba(255, 255, 255, 0.03);
+    color: white; border: 1px solid rgba(255, 255, 255, 0.08);
+    padding: 8px; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: 600;
     transition: all 0.2s;
 }
 .btn-capitulo:hover {
-    background-color: #ff4757;
-    border-color: #ff4757;
+    background: var(--color-acento); border-color: var(--color-acento);
 }
 .btn-capitulo.visto {
-    background-color: #57606f;
-    border-color: #57606f;
-}
-
-/* --- GRID PRINCIPAL DE ANIMES --- */
-.grid-anime {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 20px;
-    padding: 20px;
-}
-.tarjeta-anime {
-    background-color: #2f3542;
-    border-radius: 8px;
-    overflow: hidden;
-    text-align: center;
-    transition: transform 0.2s, box-shadow 0.2s;
-    cursor: pointer;
-    box-shadow: 0px 4px 6px rgba(0,0,0,0.3);
-}
-.tarjeta-anime:hover {
-    transform: scale(1.04);
-    box-shadow: 0px 8px 15px rgba(255, 71, 87, 0.2);
-}
-.tarjeta-anime img {
-    width: 100%;
-    height: 300px;
-    object-fit: cover;
-}
-.tarjeta-anime h3 {
-    font-size: 15px;
-    padding: 12px;
-    margin: 0;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    background: #00b894; border-color: #00b894; /* Verde esmeralda al reproducir */
 }
