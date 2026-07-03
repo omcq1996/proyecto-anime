@@ -1,6 +1,6 @@
 :root {
-    --bg-negro: #23252b; /* El gris oscuro exacto de Crunchyroll */
-    --bg-fondo: #141519; /* Fondo de la aplicación */
+    --bg-negro: #23252b; /* El gris oscuro de Crunchyroll */
+    --bg-fondo: #141519; /* Fondo general */
     --naranja-crunchy: #f47521;
     --naranja-hover: #ff8c3a;
     --texto-blanco: #ffffff;
@@ -16,7 +16,7 @@ body {
     padding-bottom: 60px;
 }
 
-/* --- HEADER CRUNCHYROLL --- */
+/* --- HEADER --- */
 .header-crunchy {
     background-color: var(--bg-negro);
     padding: 0 20px;
@@ -58,7 +58,7 @@ body {
     color: var(--texto-blanco);
 }
 
-/* Buscador minimalista */
+/* Buscador */
 .contenedor-busqueda {
     display: flex;
     background: rgba(255,255,255,0.08);
@@ -75,14 +75,13 @@ body {
     background: transparent; border: none; color: white; cursor: pointer; padding: 0 10px;
 }
 
-/* --- HERO BANNER CINEMÁTICO --- */
+/* --- HERO BANNER --- */
 .hero-banner {
     width: 100%;
     height: 480px;
     background-size: cover;
     background-position: top center;
     position: relative;
-    background-image: url('https://images.alphacoders.com/605/605570.jpg'); /* Fondo por defecto */
     transition: background-image 0.5s ease;
 }
 .hero-degradado {
@@ -112,7 +111,7 @@ body {
 }
 .btn-naranja:hover { background-color: var(--naranja-hover); }
 
-/* --- SECCIÓN RECOMENDACIONES --- */
+/* --- SECCIÓN CATÁLOGO --- */
 .contenedor-catalogo {
     max-width: 1400px;
     margin: 30px auto;
@@ -122,7 +121,7 @@ body {
     font-size: 22px; font-weight: 700; margin: 0 0 20px 0;
 }
 
-/* Filtros de pestañas */
+/* Categorías */
 .menu-categorias { display: flex; gap: 10px; margin-bottom: 25px; }
 .btn-categoria {
     background: var(--bg-negro); border: none; color: var(--texto-gris);
@@ -132,7 +131,7 @@ body {
     background-color: rgba(244, 117, 33, 0.1); color: var(--naranja-crunchy);
 }
 
-/* --- REJILLA DE TARJETAS LIMPIAS --- */
+/* Grilla */
 .grid-anime {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
@@ -150,7 +149,37 @@ body {
     white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: var(--texto-blanco);
 }
 
-/* --- MODAL ESTILO CRUNCHYROLL --- */
+/* --- BARRA DE SERVIDORES (ESTILO FLV) --- */
+.barra-servidores {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 15px;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+}
+.btn-servidor {
+    background-color: var(--bg-negro);
+    color: var(--texto-gris);
+    border: 1px solid rgba(255,255,255,0.08);
+    padding: 8px 16px;
+    font-size: 12px;
+    font-weight: 700;
+    border-radius: 4px;
+    cursor: pointer;
+    text-transform: uppercase;
+    transition: all 0.2s;
+}
+.btn-servidor:hover {
+    color: white;
+    background-color: #3a3f4d;
+}
+.btn-servidor.activo {
+    background-color: var(--naranja-crunchy);
+    color: black;
+    border-color: var(--naranja-crunchy);
+}
+
+/* --- MODAL Y REPRODUCTOR --- */
 .modal-reproductor {
     display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
     background: rgba(0,0,0,0.85); z-index: 1000; justify-content: center; align-items: center;
@@ -167,13 +196,13 @@ body {
 #sinopsis-anime-modal { color: var(--texto-gris); font-size: 13px; text-align: justify; margin-bottom: 20px; line-height: 1.5;}
 #contenedor-reproductor { width: 100%; aspect-ratio: 16/9; background: #000; border-radius: 4px; overflow: hidden; }
 
-/* Presentación interna */
+/* Vista Previa */
 .pantalla-preview { width: 100%; height: 100%; background-size: cover; background-position: center; position: relative; }
 .capa-oscura { position: absolute; width: 100%; height: 100%; background: linear-gradient(to top, #141519, rgba(0,0,0,0.3)); display: flex; align-items: center; justify-content: center; }
 .badge-premium { background: var(--naranja-crunchy); color: black; font-size: 10px; font-weight: 900; padding: 4px 12px; border-radius: 2px; letter-spacing: 1px; }
 .instruccion-play { color: var(--texto-gris); font-size: 14px; margin-top: 12px; }
 
-/* CAPÍTULOS */
+/* Botones de Episodios */
 .contenedor-capitulos h3 { font-size: 16px; margin: 20px 0 12px 0; border-left: 3px solid var(--naranja-crunchy); padding-left: 10px; }
 .grid-capitulos { display: grid; grid-template-columns: repeat(auto-fill, minmax(90px, 1fr)); gap: 10px; max-height: 120px; overflow-y: auto; }
 .btn-capitulo {
