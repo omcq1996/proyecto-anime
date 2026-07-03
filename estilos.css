@@ -1,358 +1,183 @@
-/* --- PALETA DE COLORES PREMIUM (CYBERPUNK / LIGHT NEON) --- */
 :root {
-    --bg-base: #0a0a0f;
-    --bg-superficie: #12121e;
-    --bg-superficie-trans: rgba(18, 18, 30, 0.6);
-    --color-acento: #8a2be2; /* Violeta Eléctrico */
-    --color-acento-brillo: #a020f0;
-    --color-tag: #00f2fe; /* Cian de alta tecnología para episodios */
-    --texto-principal: #ffffff;
-    --texto-secundario: #a4b0be;
-    --fuente: 'Poppins', 'Segoe UI', system-ui, sans-serif;
+    --bg-negro: #23252b; /* El gris oscuro exacto de Crunchyroll */
+    --bg-fondo: #141519; /* Fondo de la aplicación */
+    --naranja-crunchy: #f47521;
+    --naranja-hover: #ff8c3a;
+    --texto-blanco: #ffffff;
+    --texto-gris: #a0a0a0;
+    --fuente: 'Segoe UI', system-ui, sans-serif;
 }
 
 body {
-    background-color: var(--bg-base);
-    color: var(--texto-principal);
+    background-color: var(--bg-fondo);
+    color: var(--texto-blanco);
     font-family: var(--fuente);
     margin: 0;
-    padding-bottom: 50px;
+    padding-bottom: 60px;
 }
 
-/* --- BARRA SUPERIOR (HEADER INTEGRADO) --- */
-.header-flv {
-    background-color: var(--bg-superficie);
-    padding: 15px 20px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+/* --- HEADER CRUNCHYROLL --- */
+.header-crunchy {
+    background-color: var(--bg-negro);
+    padding: 0 20px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 100;
 }
 .header-contenido {
-    max-width: 1200px;
+    max-width: 1400px;
+    width: 100%;
     margin: 0 auto;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    gap: 15px;
 }
 .logo {
-    color: var(--texto-principal);
-    font-size: 26px;
-    font-weight: 800;
+    font-size: 24px;
+    font-weight: 900;
     text-transform: uppercase;
-    letter-spacing: 1px;
+    letter-spacing: -0.5px;
 }
-.logo span {
-    color: var(--color-acento);
-}
+.logo span { color: var(--naranja-crunchy); }
 
-/* BUSCADOR ESTILIZADO */
-.contenedor-busqueda {
+.nav-links {
     display: flex;
-    background: #06060a;
-    border-radius: 30px;
-    overflow: hidden;
-    padding: 2px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    transition: all 0.3s ease;
+    gap: 20px;
 }
-.contenedor-busqueda:focus-within {
-    border-color: var(--color-acento);
-    box-shadow: 0 0 10px rgba(138, 43, 226, 0.3);
-}
-.input-busqueda {
-    padding: 8px 20px;
-    background: transparent;
-    border: none;
-    outline: none;
-    color: white;
-    width: 260px;
-    font-size: 14px;
-}
-.boton-busqueda {
-    background: var(--color-acento);
-    border: none;
-    color: white;
-    padding: 0 20px;
-    border-radius: 20px;
-    cursor: pointer;
-    transition: background 0.2s;
-}
-.boton-busqueda:hover {
-    background: var(--color-acento-brillo);
-}
-
-/* MENÚ NAVEGACIÓN DE PESTAÑAS */
-.menu-categorias {
-    max-width: 1200px;
-    margin: 25px auto;
-    display: flex;
-    gap: 10px;
-    padding: 0 15px;
-}
-.btn-categoria {
-    background: transparent;
-    border: none;
-    padding: 8px 18px;
+.nav-links a {
+    color: var(--texto-gris);
+    text-decoration: none;
     font-weight: 600;
-    color: var(--texto-secundario);
-    cursor: pointer;
     font-size: 14px;
-    border-radius: 20px;
-    transition: all 0.3s;
-}
-.btn-categoria:hover, .btn-categoria.activo {
-    color: var(--texto-principal);
-    background-color: rgba(138, 43, 226, 0.15);
-}
-
-/* --- ESTRUCTURA ASIMÉTRICA DE DOS COLUMNAS --- */
-.bloque-principal {
-    max-width: 1200px;
-    margin: 0 auto;
-    display: grid;
-    grid-template-columns: 280px 1fr;
-    gap: 35px;
-    padding: 0 15px;
-}
-
-/* --- BARRA LATERAL (ANIMES EN EMISIÓN) --- */
-.columna-izquierda {
-    background: var(--bg-superficie);
-    border-radius: 12px;
-    border: 1px solid rgba(255, 255, 255, 0.03);
-    overflow: hidden;
-    align-self: start;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-}
-.titulo-emision {
-    background: linear-gradient(135deg, var(--color-acento), #4b0082);
-    color: white;
-    padding: 15px;
-}
-.titulo-emision h3 {
-    margin: 0; font-size: 14px; font-weight: 700; letter-spacing: 0.5px;
-}
-.lista-emision {
-    list-style: none;
-    padding: 0; margin: 0;
-}
-.lista-emision li {
-    padding: 14px 15px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.03);
-    font-size: 13px;
-    font-weight: 500;
-    color: var(--texto-secundario);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    cursor: pointer;
-    transition: all 0.2s;
-}
-.lista-emision li:hover {
-    color: var(--texto-principal);
-    background: rgba(255, 255, 255, 0.02);
-    padding-left: 20px; /* Sutil empujón dinámico */
-}
-.icono-play {
-    color: var(--color-acento);
-    font-size: 9px;
-    margin-right: 8px;
-}
-.tag-anime {
-    background: rgba(0, 242, 254, 0.1);
-    color: var(--color-tag);
-    font-size: 9px;
-    font-weight: 700;
-    padding: 2px 6px;
-    border-radius: 4px;
-    border: 1px solid rgba(0, 242, 254, 0.2);
-}
-
-/* --- BLOQUE DERECHO (GRID DE CONTENIDO) --- */
-.titulo-ultimos {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-    margin-bottom: 25px;
-    padding-bottom: 12px;
-}
-.titulo-ultimos h2 {
-    margin: 0;
-    font-size: 22px;
-    font-weight: 700;
-    letter-spacing: 0.5px;
-}
-.tag-hoy {
-    background: var(--color-acento);
-    color: white;
-    padding: 3px 12px;
-    font-size: 11px;
-    border-radius: 20px;
-    font-weight: 700;
-    box-shadow: 0 0 10px rgba(138, 43, 226, 0.4);
-}
-
-/* --- TARJETAS CON DISEÑO DE PORTADA PREMIUM --- */
-.grid-anime {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-    gap: 25px;
-}
-.tarjeta-anime {
-    position: relative;
-    border-radius: 12px;
-    overflow: hidden;
-    cursor: pointer;
-    background: var(--bg-superficie);
-    border: 1px solid rgba(255, 255, 255, 0.03);
-    height: 260px;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.4);
-    transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
-}
-.tarjeta-anime:hover {
-    transform: translateY(-5px);
-    border-color: var(--color-acento);
-    box-shadow: 0 12px 25px rgba(138, 43, 226, 0.2);
-}
-.tarjeta-anime img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: transform 0.4s ease;
-}
-.tarjeta-anime:hover img {
-    transform: scale(1.04);
-}
-
-/* Título difuminado inferior */
-.tarjeta-anime h3 {
-    position: absolute;
-    bottom: 0; left: 0; right: 0;
-    background: linear-gradient(transparent, rgba(10, 10, 15, 0.95) 70%);
-    color: var(--texto-principal);
-    margin: 0;
-    padding: 30px 12px 12px 12px;
-    font-size: 13px;
-    font-weight: 600;
-    text-align: left;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-/* Etiqueta de capítulo flotante de alta tecnología */
-.tarjeta-anime::after {
-    content: var(--capitulo, "Episodio 12") !important;
-    position: absolute;
-    top: 12px; left: 12px;
-    background-color: rgba(10, 10, 15, 0.75);
-    color: var(--color-tag);
-    border: 1px solid rgba(0, 242, 254, 0.3);
-    backdrop-filter: blur(5px);
-    -webkit-backdrop-filter: blur(5px);
-    font-size: 10px;
-    font-weight: 700;
-    padding: 3px 8px;
-    border-radius: 6px;
-}
-
-/* --- REPRODUCTOR MODAL ESTILO GLASS --- */
-.modal-reproductor {
-    display: none;
-    position: fixed;
-    top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(5, 5, 8, 0.7);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    z-index: 1000;
-    justify-content: center; align-items: center;
-}
-.contenido-modal {
-    background: var(--bg-superficie);
-    border: 1px solid rgba(255, 255, 255, 0.06);
-    padding: 25px;
-    border-radius: 16px;
-    max-width: 800px;
-    width: 90%;
-    position: relative;
-    box-shadow: 0 25px 60px rgba(0,0,0,0.7);
-}
-.cerrar-modal {
-    position: absolute;
-    top: 15px; right: 20px;
-    font-size: 32px; color: var(--texto-secundario); cursor: pointer;
     transition: color 0.2s;
 }
-.cerrar-modal:hover {
-    color: var(--color-acento);
-}
-#titulo-anime-modal {
-    margin: 0 0 10px 0; color: white; font-size: 24px;
-}
-#sinopsis-anime-modal {
-    color: var(--texto-secundario); font-size: 13px; text-align: justify; margin-bottom: 20px;
-}
-#contenedor-reproductor {
-    border-radius: 10px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+.nav-links a.active, .nav-links a:hover {
+    color: var(--texto-blanco);
 }
 
-/* BOTONES DE CAPÍTULOS DEL MODAL */
-.contenedor-capitulos h3 {
-    font-size: 16px; margin: 20px 0 10px 0;
+/* Buscador minimalista */
+.contenedor-busqueda {
+    display: flex;
+    background: rgba(255,255,255,0.08);
+    border-radius: 4px;
+    overflow: hidden;
 }
-.grid-capitulos {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(85px, 1fr));
-    gap: 10px;
-    max-height: 130px; overflow-y: auto;
+.input-busqueda {
+    padding: 8px 12px;
+    background: transparent;
+    border: none; outline: none;
+    color: white; width: 180px; font-size: 13px;
 }
-.btn-capitulo {
-    background: rgba(255, 255, 255, 0.03);
-    color: white; border: 1px solid rgba(255, 255, 255, 0.08);
-    padding: 8px; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: 600;
-    transition: all 0.2s;
-}
-.btn-capitulo:hover {
-    background: var(--color-acento); border-color: var(--color-acento);
-}
-.btn-capitulo.visto {
-    background: #00b894; border-color: #00b894; /* Verde esmeralda al reproducir */
+.boton-busqueda {
+    background: transparent; border: none; color: white; cursor: pointer; padding: 0 10px;
 }
 
-/* --- NUEVOS ESTILOS PARA LA PANTALLA DE BIENVENIDA --- */
-.pantalla-preview {
+/* --- HERO BANNER CINEMÁTICO --- */
+.hero-banner {
     width: 100%;
-    height: 100%;
+    height: 480px;
     background-size: cover;
-    background-position: center;
+    background-position: top center;
     position: relative;
-    background-color: #12121e;
+    background-image: url('https://images.alphacoders.com/605/605570.jpg'); /* Fondo por defecto */
+    transition: background-image 0.5s ease;
 }
-.capa-oscura {
+.hero-degradado {
     position: absolute;
-    top: 0; left: 0; width: 100%; height: 100%;
-    background: linear-gradient(to top, #12121e, rgba(10, 10, 15, 0.4));
+    width: 100%; height: 100%;
+    background: linear-gradient(to right, var(--bg-fondo) 30%, rgba(20,21,25,0.6) 60%, transparent 100%),
+                linear-gradient(to top, var(--bg-fondo) 5%, transparent 40%);
     display: flex;
     align-items: center;
-    justify-content: center;
 }
-.info-preview {
-    text-align: center;
-    padding: 20px;
+.hero-info {
+    max-width: 550px;
+    padding: 0 40px;
+    text-align: left;
 }
-.badge-premium {
-    background: var(--color-acento);
-    color: white;
-    font-size: 11px;
-    font-weight: 800;
-    padding: 5px 15px;
-    border-radius: 20px;
-    letter-spacing: 2px;
-    box-shadow: 0 0 15px rgba(138, 43, 226, 0.6);
+#hero-titulo {
+    font-size: 42px; font-weight: 800; margin: 0 0 15px 0; line-height: 1.1;
 }
-.instruccion-play {
-    color: var(--texto-secundario);
-    font-size: 15px;
-    margin-top: 15px;
-    font-weight: 500;
+#hero-sinopsis {
+    color: var(--texto-gris); font-size: 14px; line-height: 1.6; margin-bottom: 25px;
+    display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;
 }
+.btn-naranja {
+    background-color: var(--naranja-crunchy); color: black; border: none;
+    padding: 12px 28px; font-weight: 800; font-size: 14px; border-radius: 2px;
+    cursor: pointer; letter-spacing: 0.5px; transition: background 0.2s;
+}
+.btn-naranja:hover { background-color: var(--naranja-hover); }
+
+/* --- SECCIÓN RECOMENDACIONES --- */
+.contenedor-catalogo {
+    max-width: 1400px;
+    margin: 30px auto;
+    padding: 0 40px;
+}
+.titulo-seccion h2 {
+    font-size: 22px; font-weight: 700; margin: 0 0 20px 0;
+}
+
+/* Filtros de pestañas */
+.menu-categorias { display: flex; gap: 10px; margin-bottom: 25px; }
+.btn-categoria {
+    background: var(--bg-negro); border: none; color: var(--texto-gris);
+    padding: 8px 16px; font-weight: 600; font-size: 13px; cursor: pointer; border-radius: 4px;
+}
+.btn-categoria.activo, .btn-categoria:hover {
+    background-color: rgba(244, 117, 33, 0.1); color: var(--naranja-crunchy);
+}
+
+/* --- REJILLA DE TARJETAS LIMPIAS --- */
+.grid-anime {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+    gap: 20px;
+}
+.tarjeta-anime {
+    cursor: pointer; transition: transform 0.2s;
+}
+.tarjeta-anime:hover { transform: scale(1.03); }
+.tarjeta-anime img {
+    width: 100%; height: 280px; object-fit: cover; border-radius: 4px;
+}
+.tarjeta-anime h3 {
+    font-size: 14px; font-weight: 600; margin: 8px 0 0 0; text-align: left;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: var(--texto-blanco);
+}
+
+/* --- MODAL ESTILO CRUNCHYROLL --- */
+.modal-reproductor {
+    display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.85); z-index: 1000; justify-content: center; align-items: center;
+}
+.contenido-modal {
+    background: var(--bg-fondo); padding: 30px; border-radius: 6px;
+    max-width: 850px; width: 90%; position: relative; border: 1px solid rgba(255,255,255,0.05);
+}
+.cerrar-modal {
+    position: absolute; top: 15px; right: 20px; font-size: 30px; cursor: pointer; color: var(--texto-gris);
+}
+.cerrar-modal:hover { color: white; }
+#titulo-anime-modal { margin: 0 0 10px 0; font-size: 26px; text-align: left; }
+#sinopsis-anime-modal { color: var(--texto-gris); font-size: 13px; text-align: justify; margin-bottom: 20px; line-height: 1.5;}
+#contenedor-reproductor { width: 100%; aspect-ratio: 16/9; background: #000; border-radius: 4px; overflow: hidden; }
+
+/* Presentación interna */
+.pantalla-preview { width: 100%; height: 100%; background-size: cover; background-position: center; position: relative; }
+.capa-oscura { position: absolute; width: 100%; height: 100%; background: linear-gradient(to top, #141519, rgba(0,0,0,0.3)); display: flex; align-items: center; justify-content: center; }
+.badge-premium { background: var(--naranja-crunchy); color: black; font-size: 10px; font-weight: 900; padding: 4px 12px; border-radius: 2px; letter-spacing: 1px; }
+.instruccion-play { color: var(--texto-gris); font-size: 14px; margin-top: 12px; }
+
+/* CAPÍTULOS */
+.contenedor-capitulos h3 { font-size: 16px; margin: 20px 0 12px 0; border-left: 3px solid var(--naranja-crunchy); padding-left: 10px; }
+.grid-capitulos { display: grid; grid-template-columns: repeat(auto-fill, minmax(90px, 1fr)); gap: 10px; max-height: 120px; overflow-y: auto; }
+.btn-capitulo {
+    background: var(--bg-negro); color: white; border: none; padding: 10px; border-radius: 4px; cursor: pointer; font-size: 12px; font-weight: 600; transition: background 0.2s;
+}
+.btn-capitulo:hover { background: #3a3f4d; }
+.btn-capitulo.visto { background: var(--naranja-crunchy); color: black; }
