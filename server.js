@@ -55,7 +55,7 @@ app.get('/api/anime/:id/capitulo/:num', async (req, res) => {
         // 🔗 PASO A: Construir la URL del capítulo.
         // Simularemos buscar el ID en una estructura estándar de anime en internet.
         // NOTA: Para producción real, aquí deberías mapear el nombre del anime en formato slug (ej: "one-piece-capitulo-1")
-        const urlDestino = `https://jkanime.net/one-piece/${num}/`; 
+        const urlDestino = `https://jkanime.net/naruto/${num}/`; 
 
         // El robot entra a la página de forma invisible
         await pagina.goto(urlDestino, { waitUntil: 'domcontentloaded', timeout: 10000 });
