@@ -95,13 +95,15 @@ async function obtenerEpisodiosDesdeMiServidor(animeId) {
                 datosCapitulo.servidores.forEach((servidor, index) => {
                     const btnServ = document.createElement('button');
                     btnServ.classList.add('btn-servidor');
-                    btnServ.innerText = sizeof = servidor.nombre;
+                    btnServ.innerText = servidor.nombre;
                     
                     btnServ.addEventListener('click', () => {
                         document.querySelectorAll('.btn-servidor').forEach(b => b.classList.remove('activo'));
                         btnServ.classList.add('activo');
                         
+                        // 🔄 Ocultamos la presentación del trailer y le damos paso al capítulo real
                         document.getElementById('pantalla-presentacion').style.display = 'none';
+                        document.getElementById('pantalla-presentacion').innerHTML = ''; // Detiene el trailer para que no se escuche de fondo
                         document.getElementById('zona-video-real').style.display = 'block';
                         
                         const contenedorVideoReal = document.getElementById('zona-video-real');
@@ -135,19 +137,41 @@ async function obtenerEpisodiosDesdeMiServidor(animeId) {
     }
 }
 
-// 3. CONTROLADORES MODAL
+// 3. CONTROLADORES MODAL (Modificado quirúrgicamente para inyectar los trailers)
 function abrirReproductor(anime) {
     tituloModal.innerText = anime.title;
     sinopsisModal.innerText = anime.synopsis ? anime.synopsis : "Sin sinopsis disponible.";
     
-    document.getElementById('pantalla-presentacion').style.display = 'block';
+    const pantallaPreview = document.getElementById('pantalla-presentacion');
+    pantallaPreview.style.display = 'block';
+    
+    // resetear la zona del reproductor de capítulos
     document.getElementById('zona-video-real').style.display = 'none';
     document.getElementById('zona-video-real').innerHTML = '';
     document.getElementById('contenedor-servidores').innerHTML = '';
 
-    const pantallaPreview = document.getElementById('pantalla-presentacion');
-    const urlImagen = anime.images.jpg.large_image_url || anime.images.jpg.image_url;
-    pantallaPreview.style.backgroundImage = `url('${urlImagen}')`;
+    // 🔄 REEMPLAZO DE PREMIUM POR TRAILER AUTOMÁTICO:
+    if (anime.trailer && anime.trailer.embed_url) {
+        // Quitamos la imagen de fondo estática e incrustamos el iframe de YouTube nativo sin controles molestos
+        pantallaPreview.style.backgroundImage = 'none';
+        pantallaPreview.innerHTML = `
+            <iframe 
+                src="${anime.trailer.embed_url}?autoplay=0&mute=0" 
+                frameborder="0" 
+                allowfullscreen 
+                style="width: 100%; height: 100%; background: #000; border-radius: 8px;">
+            </iframe>`;
+    } else {
+        // Respaldo elegante si es un anime clásico que Jikan no tiene con trailer registrado
+        const urlImagen = anime.images.jpg.large_image_url || anime.images.jpg.image_url;
+        pantallaPreview.style.backgroundImage = `url('${urlImagen}')`;
+        pantallaPreview.innerHTML = `
+            <div style="width:100%; height:100%; display:flex; align-items:center; justify-content:center; background:rgba(0,0,0,0.4);">
+                <p style="background: rgba(0,0,0,0.8); padding: 10px 20px; border-radius: 20px; color: #fff; font-size: 14px;">
+                    🎬 Selecciona un episodio abajo para comenzar a ver
+                </p>
+            </div>`;
+    }
     
     obtenerEpisodiosDesdeMiServidor(anime.mal_id);
     modal.style.display = 'flex';
@@ -155,6 +179,7 @@ function abrirReproductor(anime) {
 
 btnCerrar.addEventListener('click', () => {
     modal.style.display = 'none';
+    document.getElementById('pantalla-presentacion').innerHTML = ''; // Apaga el trailer al cerrar el modal
     document.getElementById('zona-video-real').innerHTML = ''; 
     document.getElementById('contenedor-servidores').innerHTML = ''; 
     listaEpisodiosContenedor.innerHTML = ""; 
