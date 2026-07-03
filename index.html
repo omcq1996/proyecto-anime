@@ -3,55 +3,75 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mi Portal Anime Completo</title>
+    <title>Crunchyroll Premium Clón</title>
     <link rel="stylesheet" href="estilos.css">
 </head>
 <body>
 
-    <h1>🏮 AnimeMC 🏮</h1>
+    <header class="header-crunchy">
+        <div class="header-contenido">
+            <div class="logo">crunchy<span>roll</span></div>
+            <nav class="nav-links">
+                <a href="#" class="active">Novedades</a>
+                <a href="#">Popular</a>
+                <a href="#">Simulcast</a>
+            </nav>
+            <div class="contenedor-busqueda">
+                <input type="text" id="input-buscar" class="input-busqueda" placeholder="Buscar...">
+                <button id="btn-buscar" class="boton-busqueda">🔍</button>
+            </div>
+        </div>
+    </header>
 
-    <div class="contenedor-navegacion">
-        <div class="contenedor-busqueda">
-            <input type="text" id="input-buscar" class="input-busqueda" placeholder="Busca un anime... ej. Naruto">
-            <button id="btn-buscar" class="boton-busqueda">Buscar</button>
+    <section id="hero-banner" class="hero-banner">
+        <div class="hero-degradado">
+            <div class="hero-info">
+                <h1 id="hero-titulo">Cargando destacado...</h1>
+                <p id="hero-sinopsis">Conectando con el servidor para traer la mejor recomendación del día...</p>
+                <div class="hero-botones">
+                    <button id="btn-hero-play" class="btn-naranja">▶ COMENZAR A VER</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <main class="contenedor-catalogo">
+        <div class="titulo-seccion">
+            <h2>Nuestras recomendaciones</h2>
         </div>
         
         <div class="menu-categorias">
-            <button class="btn-categoria activo" data-tipo="top">Más Populares</button>
+            <button class="btn-categoria activo" data-tipo="top">Top Popular</button>
             <button class="btn-categoria" data-tipo="airing">En Emisión</button>
-            <button class="btn-categoria" data-tipo="upcoming">Próximos Estrenos</button>
+            <button class="btn-categoria" data-tipo="upcoming">Próximos</button>
             <button class="btn-categoria" data-tipo="movie">Películas</button>
         </div>
-    </div>
-    
-   <div class="contenido-modal">
-    <span class="cerrar-modal" id="btn-cerrar">&times;</span>
-    <h2 id="titulo-anime-modal">Nombre del Anime</h2>
-    <p id="sinopsis-anime-modal"></p>
-    
-   <div id="contenedor-reproductor">
-    <div id="pantalla-presentacion" class="pantalla-preview">
-        <div class="capa-oscura">
-            <div class="info-preview">
-                <span class="badge-premium">DISPONIBLE AHORA</span>
-                <p class="instruccion-play">Selecciona un episodio abajo para comenzar a transmitir</p>
+
+        <div id="contenedor-anime" class="grid-anime">
+            </div>
+    </main>
+
+    <div id="reproductor-modal" class="modal-reproductor">
+        <div class="contenido-modal">
+            <span class="cerrar-modal" id="btn-cerrar">&times;</span>
+            <h2 id="titulo-anime-modal">Nombre del Anime</h2>
+            <p id="sinopsis-anime-modal"></p>
+            <div id="contenedor-reproductor">
+                <div id="pantalla-presentacion" class="pantalla-preview">
+                    <div class="capa-oscura">
+                        <div class="info-preview">
+                            <span class="badge-premium">PREMIUM</span>
+                            <p class="instruccion-play">Selecciona un episodio abajo para comenzar a ver</p>
+                        </div>
+                    </div>
+                </div>
+                <div id="zona-video-real" style="display: none; width: 100%; height: 100%;"></div>
+            </div>
+            <div class="contenedor-capitulos">
+                <h3>Episodios</h3>
+                <div id="lista-episodios" class="grid-capitulos"></div>
             </div>
         </div>
-    </div>
-    
-    <div id="zona-video-real" style="display: none; width: 100%; height: 100%;">
-        </div>
-</div>
-
-    <div class="contenedor-capitulos">
-        <h3>Lista de Episodios</h3>
-        <div id="lista-episodios" class="grid-capitulos"></div>
-    </div>
-</div>
-    </div>
-
-    <div class="grid-anime" id="contenedor-anime">
-        <p>Cargando catálogo principal...</p>
     </div>
 
     <script src="app.js"></script>
