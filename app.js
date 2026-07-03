@@ -19,26 +19,37 @@ const sinopsisModal = document.getElementById('sinopsis-anime-modal');
 const botonesCategoria = document.querySelectorAll('.btn-categoria');
 const listaEpisodiosContenedor = document.getElementById('lista-episodios');
 
-// 1. CARGAR ANIMES EN LA PANTALLA PRINCIPAL
+// Variable global para guardar el anime destacado del Banner
+let animeDestacadoGlobal = null;
+
+// 1. CARGAR ANIMES EN LA PANTALLA PRINCIPAL e INYECTAR EL HERO BANNER
 async function cargarAnimes(url) {
     try {
-        contenedor.innerHTML = '<p style="color: var(--texto-secundario); padding: 20px;">Cargando catálogo...</p>';
+        contenedor.innerHTML = '<p style="color: var(--texto-gris);">Cargando recomendaciones...</p>';
         const respuesta = await fetch(url);
         const datos = await respuesta.json();
         contenedor.innerHTML = '';
 
         if (!datos.data || datos.data.length === 0) {
-            contenedor.innerHTML = '<p style="color: var(--texto-secundario); padding: 20px;">No se encontraron resultados.</p>';
+            contenedor.innerHTML = '<p style="color: var(--texto-gris);">No se encontraron resultados.</p>';
             return;
         }
 
-        datos.data.slice(0, 16).forEach(anime => {
+        // --- TRUCO CRUNCHYROLL: Hacer el Hero Banner Dinámico ---
+        // Tomamos el primer anime de la lista para colocarlo como portada destacada arriba
+        const animeDestacado = datos.data[0];
+        animeDestacadoGlobal = animeDestacado; // Guardamos referencia
+        
+        document.getElementById('hero-titulo').innerText = animeDestacado.title;
+        document.getElementById('hero-sinopsis').innerText = animeDestacado.synopsis ? animeDestacado.synopsis : "Sin sinopsis disponible.";
+        
+        const urlFondo = animeDestacado.images.jpg.large_image_url || animeDestacado.images.jpg.image_url;
+        document.getElementById('hero-banner').style.backgroundImage = `url('${urlFondo}')`;
+
+        // Pintamos el resto del catálogo (los siguientes 12) abajo
+        datos.data.slice(1, 13).forEach(anime => {
             const tarjeta = document.createElement('div');
             tarjeta.classList.add('tarjeta-anime');
-            
-            // Asignamos una etiqueta de simulación de episodio inicial (Estilo AnimeFLV)
-            tarjeta.style.setProperty('--capitulo', '"Episodio 12"'); 
-
             tarjeta.innerHTML = `
                 <img src="${anime.images.jpg.image_url}" alt="${anime.title}" loading="lazy">
                 <h3>${anime.title}</h3>
@@ -47,52 +58,52 @@ async function cargarAnimes(url) {
             contenedor.appendChild(tarjeta);
         });
     } catch (error) {
-        console.error("Error cargando el catálogo:", error);
-        contenedor.innerHTML = '<p style="color: var(--texto-secundario); padding: 20px;">Hubo un problema al conectar con el servidor.</p>';
+        console.error("Error cargando catálogo:", error);
+        contenedor.innerHTML = '<p style="color: var(--texto-gris);">Error al conectar con los servidores.</p>';
     }
 }
 
+// Escuchar el clic del gran botón naranja de "Comenzar a ver" del Banner principal
+document.getElementById('btn-hero-play').addEventListener('click', () => {
+    if (animeDestacadoGlobal) {
+        abrirReproductor(animeDestacadoGlobal);
+    }
+});
+
 // 2. OBTENER EPISODIOS E INYECTAR EL REPRODUCTOR DINÁMICO
 async function obtenerEpisodiosDesdeMiServidor(animeId) {
-    listaEpisodiosContenedor.innerHTML = '<p style="grid-column: 1/-1; color: var(--texto-secundario);">Conectando con servidores espejo...</p>';
+    listaEpisodiosContenedor.innerHTML = '<p style="grid-column: 1/-1; color: var(--texto-gris);">Buscando episodios en el servidor...</p>';
     
     try {
         const respuesta = await fetch(`${MI_SERVIDOR_LOCAL}/anime/${animeId}/capitulos`);
         const datos = await respuesta.json();
-        
         listaEpisodiosContenedor.innerHTML = '';
 
-        // Creamos los botones de capítulos según el total real devuelto por el backend
         for (let i = 1; i <= datos.total; i++) {
             const btnEp = document.createElement('button');
             btnEp.classList.add('btn-capitulo');
-            btnEp.innerText = `Cap. ${i}`;
+            btnEp.innerText = `Ep. ${i}`;
             
             btnEp.addEventListener('click', async () => {
                 document.querySelectorAll('.btn-capitulo').forEach(b => b.classList.remove('visto'));
                 btnEp.classList.add('visto');
                 
-                // OCULTAR BIENVENIDA Y MOSTRAR CONTENEDOR DE VIDEO
                 document.getElementById('pantalla-presentacion').style.display = 'none';
                 document.getElementById('zona-video-real').style.display = 'block';
-                document.getElementById('zona-video-real').innerHTML = '<p style="color: white; padding: 20px; text-align: center;">Cargando flujo de video...</p>';
+                document.getElementById('zona-video-real').innerHTML = '<p style="color: white; padding: 20px; text-align: center;">Abriendo flujo de streaming...</p>';
 
-                // Pedimos el enlace del capítulo a tu backend en Render
                 const resVideo = await fetch(`${MI_SERVIDOR_LOCAL}/anime/${animeId}/capitulo/${i}`);
                 const datosVideo = await resVideo.json();
                 
                 const contenedorVideoReal = document.getElementById('zona-video-real');
                 
-                // DETECCIÓN INTELIGENTE: Si es un video local o de Google Storage (.mp4 directo)
                 if (datosVideo.videoUrl.endsWith('.mp4') || datosVideo.videoUrl.includes('googleapis') || datosVideo.videoUrl.startsWith('/')) {
                     contenedorVideoReal.innerHTML = `
                         <video id="video-player" controls autoplay style="width: 100%; height: 100%; background: #000;">
                             <source src="${datosVideo.videoUrl}" type="video/mp4">
-                            Tu navegador no soporta el reproductor nativo de video.
                         </video>
                     `;
                 } else {
-                    // Si en el futuro agregas servidores embebidos externos (Filemoon, Streamtape, etc.)
                     contenedorVideoReal.innerHTML = `
                         <iframe id="video-iframe" src="${datosVideo.videoUrl}" frameborder="0" allowfullscreen style="width: 100%; height: 100%; background: #000;"></iframe>
                     `;
@@ -102,39 +113,34 @@ async function obtenerEpisodiosDesdeMiServidor(animeId) {
             listaEpisodiosContenedor.appendChild(btnEp);
         }
     } catch (error) {
-        console.error("Error llamando a la lista de capítulos:", error);
-        listaEpisodiosContenedor.innerHTML = '<p style="grid-column: 1/-1; color: var(--texto-secundario);">Error al cargar la lista de episodios.</p>';
+        console.error("Error:", error);
+        listaEpisodiosContenedor.innerHTML = '<p style="grid-column: 1/-1; color: var(--texto-gris);">No hay episodios listados para este contenido.</p>';
     }
 }
 
-// 3. ABRIR MODAL CONFIGURANDO LA PANTALLA DE PRESENTACIÓN DE ENTRADA
+// 3. CONTROLADORES DEL MODAL
 function abrirReproductor(anime) {
     tituloModal.innerText = anime.title;
     sinopsisModal.innerText = anime.synopsis ? anime.synopsis : "Sin sinopsis disponible.";
     
-    // Resetear el estado de las pantallas internas del reproductor
     document.getElementById('pantalla-presentacion').style.display = 'block';
     document.getElementById('zona-video-real').style.display = 'none';
     document.getElementById('zona-video-real').innerHTML = '';
 
-    // Colocar la imagen grande del anime como fondo estilizado de la presentación
     const pantallaPreview = document.getElementById('pantalla-presentacion');
-    const urlImagen = anime.images.jpg.large_image_url || anime.images.jpg.image_url;
-    pantallaPreview.style.backgroundImage = `url('${urlImagen}')`;
+    pantallaPreview.style.backgroundImage = `url('${anime.images.jpg.large_image_url || anime.images.jpg.image_url}')`;
     
-    // Cargar la lista de episodios conectando al backend
     obtenerEpisodiosDesdeMiServidor(anime.mal_id);
     modal.style.display = 'flex';
 }
 
-// 4. CERRAR MODAL Y LIMPIAR FLUJOS MULTIMEDIA ACTIVOS
 btnCerrar.addEventListener('click', () => {
     modal.style.display = 'none';
-    document.getElementById('zona-video-real').innerHTML = ''; // Destruye el reproductor para apagar audios de fondo
+    document.getElementById('zona-video-real').innerHTML = ''; 
     listaEpisodiosContenedor.innerHTML = ""; 
 });
 
-// 5. EVENTOS DE FILTRADO POR CATEGORÍAS
+// 4. EVENTOS FILTROS
 botonesCategoria.forEach(boton => {
     boton.addEventListener('click', (e) => {
         botonesCategoria.forEach(btn => btn.classList.remove('activo'));
@@ -144,7 +150,7 @@ botonesCategoria.forEach(boton => {
     });
 });
 
-// 6. LOGICA DEL BUSCADOR
+// 5. BUSCADOR
 btnBuscar.addEventListener('click', () => {
     const busqueda = inputBuscar.value.trim();
     if (busqueda !== "") {
@@ -152,10 +158,8 @@ btnBuscar.addEventListener('click', () => {
         cargarAnimes(`${urlsAPI.buscar}${busqueda}`);
     }
 });
-
 inputBuscar.addEventListener('keypress', (e) => {
     if (e.key === 'Enter') btnBuscar.click();
 });
 
-// Inicialización automática de la app con el catálogo Top
 cargarAnimes(urlsAPI.top);
